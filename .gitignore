@@ -3,7 +3,6 @@ tailwindcss-linux-x64
 
 # Test outputs
 test_*.pdf
-test_*.py
 .claude/
 # Python
 __pycache__/
