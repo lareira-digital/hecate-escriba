@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event_name }} - Conference Program</title>
+</head>
+<body>
+    <!-- Optional document header with conditional rendering -->
+    {% if document_title or document_security_level or document_creation_date %}
+    <div class="document-info">
+        {% if document_title %}<b>Document:</b> {{ document_title }}<br/>{% endif %}
+        {% if document_security_level %}<b>Security level:</b> <span class="text-red">{{ document_security_level }}</span><br/>{% endif %}
+        {% if document_creation_date %}<b>Date:</b> {{ document_creation_date }}<br/>{% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Event header -->
+    <div class="header">
+        <h1>{{ event_name }}</h1>
+        <div class="event-details">
+            <p><b>Date:</b> {{ event_date }}</p>
+            <p><b>Location:</b> {{ event_location }}</p>
+            {% if max_attendees %}
+            <p><b>Capacity:</b> {{ max_attendees }} attendees</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Event description -->
+    <div class="section">
+        <h2>About This Event</h2>
+        <p>{{ event_description }}</p>
+    </div>
+
+    <!-- Speakers section -->
+    <div class="section">
+        <h2>Featured Speakers</h2>
+        <div class="speakers-grid">
+            {% for speaker in speakers %}
+            <div class="speaker-card">
+                <h3>{{ speaker.name }}</h3>
+                <p class="speaker-title">{{ speaker.title }}</p>
+                <p class="speaker-company">{{ speaker.company }}</p>
+                {% if speaker.bio %}
+                <p class="speaker-bio">{{ speaker.bio }}</p>
+                {% endif %}
+                {% if speaker.email %}
+                <p class="contact"><b>Contact:</b> {{ speaker.email }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Sessions schedule -->
+    <div class="section">
+        <h2>Conference Schedule</h2>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Session</th>
+                    <th>Speaker</th>
+                    <th>Location</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in sessions %}
+                <tr class="{% if session.is_keynote %}keynote-session{% endif %}">
+                    <td class="time-cell">{{ session.time }}</td>
+                    <td>
+                        <div class="session-title">
+                            {% if session.is_keynote %}<span class="keynote-badge">KEYNOTE</span>{% endif %}
+                            {{ session.title }}
+                        </div>
+                        {% if session.description %}
+                        <div class="session-description">{{ session.description }}</div>
+                        {% endif %}
+                    </td>
+                    <td>{{ session.speaker_name }}</td>
+                    <td>{{ session.location }}</td>
+                    <td class="duration-cell">{{ session.duration_minutes }} min</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Sponsors section (conditional) -->
+    {% if sponsors %}
+    <div class="section">
+        <h2>Our Sponsors</h2>
+        <div class="sponsors-list">
+            {% for sponsor in sponsors %}
+            <div class="sponsor-item level-{{ sponsor.level|lower }}">
+                <h3>{{ sponsor.name }}</h3>
+                <p class="sponsor-level">{{ sponsor.level }} Sponsor</p>
+                {% if sponsor.website %}
+                <p class="sponsor-website">{{ sponsor.website }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- WiFi information (conditional) -->
+    {% if wifi_ssid %}
+    <div class="section wifi-section">
+        <h2>WiFi Information</h2>
+        <p><b>Network:</b> <code>{{ wifi_ssid }}</code></p>
+        {% if wifi_password %}
+        <p><b>Password:</b> <code>{{ wifi_password }}</code></p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Special notes (conditional) -->
+    {% if special_notes %}
+    <div class="section notes-section">
+        <h2>Important Notes</h2>
+        <p>{{ special_notes }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Footer with contact info -->
+    <div class="footer">
+        {% if registration_url %}
+        <p><b>Registration:</b> {{ registration_url }}</p>
+        {% endif %}
+        {% if contact_email %}
+        <p><b>Contact:</b> {{ contact_email }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
